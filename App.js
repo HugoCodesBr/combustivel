@@ -1,13 +1,27 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, Modal } from 'react-native';
 
+import Calculo from './src/Calculo';
+
 export default class App extends Component{
   constructor(props){
     super(props)
     this.state = {
       litroAlcool: 0,
       litroGasolina: 0,
+      modalAberto: false,
     }
+
+    this.entrar = this.entrar.bind(this);
+    this.sair = this.sair.bind(this);
+  }
+
+  entrar(){
+    this.setState({modalAberto: true})
+  }
+
+  sair(){
+    this.setState({modalAberto: false})
   }
 
   render(){
@@ -36,31 +50,12 @@ export default class App extends Component{
           />
         </View>
 
-        <TouchableOpacity style={styles.btnCalculo}>
+        <TouchableOpacity style={styles.btnCalculo} onPress={() => this.entrar()}>
           <Text style={styles.txtCalculo}>Calcular</Text>
         </TouchableOpacity>
 
-        <Modal
-        animationType='slide'
-        >
-          <View style={styles.container}>
-            <Image
-            source={require('./assets/gas.png')}
-            style={styles.gas}
-            />
-            <Text style={styles.tituloResult}>Compensa usar Álcool</Text>
-
-            <View style={styles.precos}>
-              <Text style={styles.tituloPrecos}>Com os preços:</Text>
-              <Text style={styles.preco}>Álcool: R$ 4.60</Text>
-              <Text style={styles.preco}>Gasolina: R$ 7.60</Text>
-            </View>
-
-            <TouchableOpacity>
-              <Text>Calcular novamente</Text>
-            </TouchableOpacity>
-          </View>
-        </Modal>
+        <Calculo aberto={this.state.modalAberto} />
+        
       </View>
 
     );
@@ -115,5 +110,42 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 18,
     fontWeight: 'bold'
+  },
+  gas: {
+    width: 130,
+    height: 130,
+  },
+  tituloResult: {
+    marginTop: 20,
+    color: '#16F4A6',
+    fontSize: 26,
+    fontWeight: 'bold'
+  },
+  precos: {
+    marginTop: 30,
+  },
+  tituloPrecos: {
+    color: '#fff',
+    fontSize: 20,
+    fontWeight: 'bold'
+  },
+  preco: {
+    color: '#fff',
+    textAlign: 'center',
+    marginTop: 8,
+  },
+  btnVoltar: {
+    marginTop: 40,
+    borderColor: '#EF4130',
+    borderWidth: 1,
+    borderRadius: 4,
+    padding: 10,
+    width: 250,
+  },
+  txtVoltar: {
+    textAlign: 'center',
+    color: '#EF4130',
+    fontWeight: 'bold',
+    fontSize: 18,
   }
 });
