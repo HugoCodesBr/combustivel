@@ -55,7 +55,6 @@ export default class App extends Component{
         </TouchableOpacity>
 
         <Calculo aberto={this.state.modalAberto} />
-        
       </View>
 
     );
