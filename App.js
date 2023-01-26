@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, Modal } from 'react-native';
 
-import Calculo from './src/Calculo';
-
 export default class App extends Component{
   constructor(props){
     super(props)
@@ -10,17 +8,25 @@ export default class App extends Component{
       litroAlcool: 0,
       litroGasolina: 0,
       modalAberto: false,
+      resultadoConta: '',
     }
 
-    this.entrar = this.entrar.bind(this);
-    this.sair = this.sair.bind(this);
+    this.calculcar = this.calculcar.bind(this);
+    this.voltar = this.voltar.bind(this);
   }
 
-  entrar(){
+  calculcar(){
     this.setState({modalAberto: true})
+    let resultado = this.state.litroAlcool / this.state.litroGasolina;
+
+    if(resultado < 0.7){
+      this.setState({resultadoConta: 'Álcool'})
+    }else{
+      this.setState({resultadoConta: 'Gasolina'})
+    }
   }
 
-  sair(){
+  voltar(){
     this.setState({modalAberto: false})
   }
 
@@ -50,11 +56,32 @@ export default class App extends Component{
           />
         </View>
 
-        <TouchableOpacity style={styles.btnCalculo} onPress={() => this.entrar()}>
+        <TouchableOpacity style={styles.btnCalculo} onPress={() => this.calculcar()}>
           <Text style={styles.txtCalculo}>Calcular</Text>
         </TouchableOpacity>
 
-        <Calculo aberto={this.state.modalAberto} />
+        <Modal
+          animationType='slide'
+          visible={this.state.modalAberto}
+          >
+            <View style={styles.container}>
+            <Image
+            source={require('./assets/gas.png')}
+            style={styles.gas}
+            />
+            <Text style={styles.tituloResult}>Compensa usar {this.state.resultadoConta}</Text>
+
+            <View style={styles.precos}>
+                <Text style={styles.tituloPrecos}>Com os preços:</Text>
+                <Text style={styles.preco}>Álcool: R$ {this.state.litroAlcool}</Text>
+                <Text style={styles.preco}>Gasolina: R$ {this.state.litroGasolina}</Text>
+            </View>
+
+            <TouchableOpacity style={styles.btnVoltar} onPress={() => this.voltar()}>
+                <Text style={styles.txtVoltar}>Calcular novamente</Text>
+            </TouchableOpacity>
+            </View>
+        </Modal>
       </View>
 
     );
@@ -95,6 +122,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     marginTop: 8,
     borderRadius: 4,
+    padding: 8,
   },
   btnCalculo: {
     backgroundColor: '#EF4130',
